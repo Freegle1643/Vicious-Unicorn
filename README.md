@@ -9,7 +9,7 @@ Sometimes we spend too much time typing the same commands on multiple machines j
 
 ### Set up Docker-ce for Linux
 
-`install_docker.sh`
+[`install_docker.sh`](https://github.com/Freegle1643/Vicious-Unicorn/blob/master/install_docker.sh)
 
 ```shell
 #!/bin/bash
