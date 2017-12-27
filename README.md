@@ -32,7 +32,7 @@ sudo apt-get install docker-ce
 
 This is the standard Docker-ce installation from [official documentation](https://docs.docker.com/engine/installation/linux/docker-ce/ubuntu/#install-docker-ce-1). After we create this file we need to make it executable by typing `chmod +x ./install_docker.sh` 
 
-Then we simply run this script by `./install_docker.sh`. Notice that you may want to switch to `root` for this operation. After the process is finished. Switch back to your non-root user and and it to docker group so that we don't need to interact with Docker using `root` privileges.
+Then we simply run this script by `./install_docker.sh`. Notice that you may want to switch to `root` for this operation. After the process is finished. Switch back to your non-root user and add it to docker group so that we don't need to interact with Docker using `root` privileges.
 
 ```bash
 sudo usermod -aG docker $USER
