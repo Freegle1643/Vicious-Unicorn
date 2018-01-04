@@ -80,7 +80,7 @@ The reason it's an ugly way is that I currently have to run Docker container wit
 #### Start the container
 
 ```bash
-docker run -it --rm -e DISPLAY=:0 -v /tmp/.X11-unix:/tmp/.X11-unix --device /dev/snd --privileged -p 5961:5900 -p 5971:5901 haoyuan/ubuntu-16.04-x11spice-xfce4-vlc-2:setup
+docker run -it --rm -e DISPLAY=:0 -v /tmp/.X11-unix:/tmp/.X11-unix --device /dev/snd --privileged --device=/dev/dri:/dev/dri -p 5961:5900 -p 5971:5901 freegle/ubuntu-16.04-x11spice-xfce4-vlc-2:setup.j.4
 ```
 
 #### Start X server
