@@ -60,3 +60,56 @@ Server:
 ```
 
 These steps above reduce the overhead we need to set up Docker especially when set up multiple times on different machines.
+
+
+
+## Enable X11SPICE in Docker
+
+[SPICE](https://www.spice-space.org/) provide a much faster and more responsive remote desktop experiences and is widely applied via QEMU. X11VNC is popular in enabling remote graphic access to Docker containers but undertake quality and bandwidth problems when streaming videos or any content with high refresh rate. We want to enable SPICE in container so that we could enjoy graphic desktop experience in Docker, which is quite economical and efficient.
+
+What I use is [x11spice](https://gitlab.com/spice/x11spice), it will enable a running X11 desktop to be available via a Spice server, similar to X11VNC.
+
+### Dockerfile
+
+
+
+### An Ugly Way
+
+The reason it's an ugly way is that I currently have to run Docker container with `--privileged` to make sure X display server can be started by container. I'll try to find what are the steps and requirements to make sure container start X without privileged mode in the future. But since my urgent goal is to enable SPICE in Docker container, I shall still try this ugly way. 
+
+#### Start the container
+
+```bash
+docker run -it --rm -e DISPLAY=:0 -v /tmp/.X11-unix:/tmp/.X11-unix --device /dev/snd --privileged -p 5961:5900 -p 5971:5901 haoyuan/ubuntu-16.04-x11spice-xfce4-vlc-2:setup
+```
+
+#### Start X server
+
+Inside the container, use `xinit` to start X server
+
+#### Start a desktop on the assigned display 
+
+```bash
+DISPLAY=:0 startxfce4
+```
+
+#### Start X11SPICE in container
+
+```bash
+sudo x11spice --display=:0 --allow-control --password=1 172.17.0.2:5900
+```
+
+Notice you need to choose the `eth0` IP rather than `lo` IP, which in most of the case is `172.17.0.*`
+
+#### Connect via a spice client
+
+Ubuntu guest is running in my VMware Workstation, and after I start X in container run with `--privileged`, the whole display of Ubuntu guest was occupied and no interaction could be made. I need a spice client to connect, here I use a Windows spice client to connect to it. 
+
+When connecting to the container, we need to use the Ubuntu VM IP and the port projected to `5900` in container. Your VM IP could be known by `ifconfig` inside VM and the port projected to container's `5900` is defined when you run it.
+
+```
+spice://192.168.109.132:5961
+```
+
+Then type the password in last step, you can interact with your container using SPICE.
+
