@@ -113,3 +113,16 @@ spice://192.168.109.132:5961
 
 Then type the password in last step, you can interact with your container using SPICE.
 
+
+
+
+
+REMEMBER TO START WITHOUT ROOT
+
+add sudo apt-get install python-pip
+
+add sudo apt-get install intel-gpu-tools
+
+add sudo apt-get install gdb
+
+DON'T use --rm when you know you would make further modification on that
