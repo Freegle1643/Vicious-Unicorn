@@ -71,6 +71,8 @@ What I use is [x11spice](https://gitlab.com/spice/x11spice), it will enable a ru
 
 ### Dockerfile
 
+This Dockerfile is used to build a Docker image with environment set up to install [x11spice](https://gitlab.com/spice/x11spice). The set up of x11spice failed every time following its own guide, so some manual setup would be required. I would lately leave a link to a built up image so that you can pull directly from it. 
+
 ```dockerfile
 FROM ubuntu:16.04
 MAINTAINER Hao Yuan <freegleyuan@foxmail.com>
