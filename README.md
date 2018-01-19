@@ -9,7 +9,7 @@ Sometimes we spend too much time typing the same commands on multiple machines j
 
 ### Set up Docker-ce for Linux
 
-[`install_docker.sh`](https://github.com/Freegle1643/Vicious-Unicorn/blob/master/install_docker.sh)
+[install_docker.sh](https://github.com/Freegle1643/Vicious-Unicorn/blob/master/install_docker.sh)
 
 ```shell
 #!/bin/bash
@@ -116,6 +116,45 @@ EXPOSE 5901
 EXPOSE 22
 ```
 
+### Set up X11Spice
+
+According to the [instruction](https://gitlab.com/spice/x11spice) provided, if we using git, which the way I used:
+
+Clone repository
+
+```bash
+git clone https://gitlab.com/spice/x11spice.git
+```
+
+Building
+
+```bash
+cd x11spice
+./autogen.sh
+```
+
+*You may type `chmod +x ./autogen.sh` before you run the command above*
+
+Remove `-Werror` from `src/Makefile` 
+
+Run
+
+```bash
+cd src/tests
+gcc -Wall   -o x11spice_test tests.o x11spice_test.o xcb.o xdummy.o util.o main.o     -pthread -I/usr/include/gtk-3.0 -I/usr/include/at-spi2-atk/2.0 -I/usr/include/at-spi-2.0 -I/usr/include/dbus-1.0 -I/usr/lib/x86_64-linux-gnu/dbus-1.0/include -I/usr/include/gtk-3.0 -I/usr/include/gio-unix-2.0/ -I/usr/include/mirclient -I/usr/include/mircore -I/usr/include/mircookie -I/usr/include/cairo -I/usr/include/pango-1.0 -I/usr/include/harfbuzz -I/usr/include/pango-1.0 -I/usr/include/atk-1.0 -I/usr/include/cairo -I/usr/include/pixman-1 -I/usr/include/freetype2 -I/usr/include/libpng12 -I/usr/include/gdk-pixbuf-2.0 -I/usr/include/libpng12 -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include -I/usr/include/spice-server -I/usr/include/spice-1 -I/usr/include/spice-1 -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include -I/usr/include/pixman-1 -g -O2 -lxcb -lxcb-damage -lxcb-xfixes -lxcb-render -lxcb-shape -lxcb -lxcb-xtest -lxcb -lxcb-shm -lxcb -lxcb-util -lxcb -lgtk-3 -lgdk-3 -lpangocairo-1.0 -lpango-1.0 -latk-1.0 -lcairo-gobject -lcairo -lgdk_pixbuf-2.0 -lgio-2.0 -lgobject-2.0 -lglib-2.0 -lspice-server -lglib-2.0 -lpixman-1
+```
+
+*The command above is actually an adjustment of the error output of directly run `./configure`  by putting `-o x11spice_test tests.o x11spice_test.o xcb.o xdummy.o util.o main.o` that was initially at the bottom right after `gcc -Wall`.*
+
+```bash
+./configure
+```
+
+```bash
+cd x11spice
+make
+```
+
 
 
 ### An Ugly Way
@@ -158,16 +197,13 @@ spice://192.168.109.132:5961
 
 Then type the password in last step, you can interact with your container using SPICE.
 
+### Future Improvement & Notice
+
+- Modify Dockerfile to start without root user
+- add `sudo apt-get install python-pip`
+- add `sudo apt-get install intel-gpu-tools`
+- add `sudo apt-get install gdb`
+- DON'T use `--rm` when you know you would make further modification on that image
 
 
 
-
-REMEMBER TO START WITHOUT ROOT
-
-add sudo apt-get install python-pip
-
-add sudo apt-get install intel-gpu-tools
-
-add sudo apt-get install gdb
-
-DON'T use --rm when you know you would make further modification on that
