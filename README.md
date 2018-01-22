@@ -81,31 +81,34 @@ ENV HOME /root
 ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get update \
-	&& apt-get install -y supervisor \
-		sudo \
-		wget \
-		curl \
-		net-tools \
-		iputils-ping \
-		openssh-server vim-tiny \
-		xserver-xorg-core \
-		xfonts-base \
-		x11-session-utils x11-utils x11-xfs-utils \
-	   	xauth x11-common \
-	   	xinit \
-		xfce4 xfce4-goodies \
-		xvfb \
-		git \
-		vim \
-		dh-autoreconf autoconf pkg-config \
-		libxcb* \
-		libgtk-3-dev \
-		libspice-server* \
-		firefox \
-		vlc browser-plugin-vlc \
-	&& apt-get autoclean \
-	&& apt-get autoremove \
-	&& rm -rf /var/lib/apt/lists/*
+        && apt-get install -y supervisor \
+                sudo \
+                wget \
+                curl \
+                net-tools \
+                iputils-ping \
+                openssh-server vim-tiny \
+                xserver-xorg-core \
+                xfonts-base \
+                x11-session-utils x11-utils x11-xfs-utils \
+                xauth x11-common \
+                xinit \
+                xfce4 xfce4-goodies \
+                xvfb \
+                git \
+                gdb \
+                python-pip \
+                intel-gpu-tools \
+                vim \
+                dh-autoreconf autoconf pkg-config \
+                libxcb* \
+                libgtk-3-dev \
+                libspice-server* \
+                firefox \
+                vlc browser-plugin-vlc \
+        && apt-get autoclean \
+        && apt-get autoremove \
+        && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /root
 
@@ -115,6 +118,18 @@ EXPOSE 5900
 EXPOSE 5901
 EXPOSE 22
 ```
+
+*This image is mainly designed to run on Intel hardware, so I add `intel-gpu-tools`, a package to monitor Intel graphics*
+
+### Build Your Image
+
+Inside the directory where your Dockerfile stored, type the following commend to build the image:
+
+```bash
+docker build -t="freegle/ubuntu-x11spice" .
+```
+
+*If you are in China and want to accelerate the pull speed of Docker image, try [DaoCloud](https://www.daocloud.io/mirror#accelerator-doc) mirrors.*
 
 ### Set up X11Spice
 
