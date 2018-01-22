@@ -207,3 +207,9 @@ Then type the password in last step, you can interact with your container using 
 
 
 
+## Directly set up SPICE in Docker container
+
+
+
+
+
