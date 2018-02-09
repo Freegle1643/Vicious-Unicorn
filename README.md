@@ -212,6 +212,59 @@ spice://192.168.109.132:5961
 
 Then type the password in last step, you can interact with your container using SPICE.
 
+### Using Xephyr for decent operations
+
+In the last session, we introduced an ugly way to enable X11Spice in container and remotely connect container via a spice client. However, in that privileged mode, only one container could open a host display and thus only one container could provide video streaming at a time, which doesn't satisfy our concurrency goal. So we now introduce method to address such problem by using [Xephyr](https://wiki.archlinux.org/index.php/Xephyr). Sadly it's currently now a perfect solution because it needs to open an actual window on the host in order to provide streaming remotely. But since it already satisfy the concurrency goal, we should address the window problem later. And hopefully it wouldn't need to open a window to stream remotely. 
+
+#### Set up Xephyr on the container
+
+Simply add the following to dockerfile above or type it inside your container:
+
+```bash
+apt-get install xserver-xephyr
+```
+
+*If you directly add this to dockerfile and build you container, you have to go through setup x11spice again. However if you install it inside container and then commit it to a new image, the process would be much easier.*
+
+#### Fire up Xephyr
+
+Once we've installed Xephyr, we could use following command to fire it up. Xephyr targets a window on a host X Server as its framebuffer, which means it would open a window on your machine.
+
+```bash
+Xephyr -screen 800x600 :2&
+```
+
+The number of display could be any available number as long as it's an unoccupied one. 
+
+#### Start Graphic apps and X11SPICE
+
+Just like what we do in the ugly way, type:
+
+```bash
+DISPLAY=:0 startxfce4
+sudo x11spice --display=:0 --allow-control --password=1 172.17.0.2:5900
+```
+
+Notice you need to choose the `eth0` IP rather than `lo` IP, which in most of the case is `172.17.0.*`
+
+####Connect via a spice client
+
+```bash
+spice://192.168.109.132:5961
+```
+
+We could use such method to open up multiple windows and sessions to multiple containers. Just need to take care of the following things：
+
+- port we assign to container when start it with `-p xxxx:5900`
+- container IP to be used when start x11spice
+- available display
+
+#### Problems
+
+*Even this doesn't seems to be an ugly way, but **1)** the bandwidth is still considerably high. Also the **2)** lagging problem as we test before using Xspice is still there. **3)** Connection drops and x11spice terminal continually display `Cannot get shared memory`*
+
+With these problems above, I still reckon spice is not a good way, or even practically workable way for remote desktop. It might be suitable for streaming comparing to VNC, but taking the bandwidth of equally the same level as VNC, the lagging problem simply couldn't persuade me to apply X11spice+Xephyr as a remote desktop control solution. 
+
 ### Future Improvement & Notice
 
 - Modify Dockerfile to start without root user
@@ -224,7 +277,7 @@ Then type the password in last step, you can interact with your container using 
 
 ## Directly set up SPICE in Docker container
 
-
+LEAVE BLANK FOR FUTURE SUPPLEMENT
 
 
 
